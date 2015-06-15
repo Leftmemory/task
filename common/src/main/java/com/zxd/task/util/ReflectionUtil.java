@@ -9,6 +9,7 @@ import java.util.Map;
 
 /**
  * Created by zxd on 2015/6/16.
+ * 通过反射把bean的属性转换成map或String
  */
 public class ReflectionUtil {
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Created by zxd on 2015/6/15.
- * Jedis客户端
+ * Jedis客户端。提供缓存基础操作
  */
 @Slf4j
 public class JedisClient {
