@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+
+    <!-- memcached初始化 -->
+    <!--<bean id="builder"-->
+          <!--class="net.rubyeye.xmemcached.XMemcachedClientBuilder">-->
+        <!--<constructor-arg>-->
+            <!--<bean class="net.rubyeye.xmemcached.utils.AddrUtil"-->
+                  <!--factory-method="getAddresses">-->
+                <!--<constructor-arg value="${memached.host}"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+    <!--<bean id="memcachedClient"-->
+          <!--class="net.rubyeye.xmemcached.MemcachedClient"-->
+          <!--factory-bean="builder" factory-method="build"-->
+          <!--destroy-method="shutdown"/>-->
+
+    <!--<bean id="redisClient"-->
+          <!--class="com.zxd.task.cache.JedisClient">-->
+        <!--<constructor-arg value="${redis.host}"/>-->
+        <!--<constructor-arg value="${redis.auth}"/>-->
+    <!--</bean>-->
+
+</beans>
