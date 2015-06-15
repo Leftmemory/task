@@ -2,6 +2,7 @@ package com.zxd.task.util;
 
 import com.google.common.collect.Maps;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class ReflectionUtil {
         ReflectionUtil.setValueMap(obj, cls, map);
         if (map.size() > 0) {
             for (Map.Entry<String, String> e : map.entrySet()) {
-                if (e.getValue() != null && !"".equals(e.getValue())) {
+                if (StringUtils.isEmpty(e.getValue())) {
                     sb.append("&").append(e.getKey()).append("=").append(e.getValue());
                 }
             }
