@@ -7,9 +7,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.util.SafeEncoder;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
@@ -150,6 +148,32 @@ public class JedisClient {
         return ret == null ? null : (T) ret;
     }
 
+    public boolean setHash(final String key, final String field, final Object value, final int seconds) {
+        if (key == null || field == null || value == null) {
+            return false;
+        }
+        final Object success = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                Long ret;
+                if (isSimpleObj(value.getClass())) {
+                    ret = jedis.hset(key, field, value.toString());
+                } else {
+                    byte[] bKey = SafeEncoder.encode(key);
+                    byte[] bField = SafeEncoder.encode(field);
+                    byte[] bValue = serialize(value);
+                    ret = jedis.hset(bKey, bField, bValue);
+                }
+                if (seconds != 0) {
+                    jedis.expire(key, seconds);
+                }
+                return ret != null && ret == 1;
+            }
+        });
+        return success != null && (boolean) success;
+    }
+
+
     private static boolean isSimpleObj(Class classObj) {
         for (Class c : SIMPLE_CLASS_OBJ) {
             if (c.isAssignableFrom(classObj))
@@ -175,6 +199,31 @@ public class JedisClient {
         return ret;
     }
 
+    //序列化
+    private byte[] serialize(Object object) {
+        if (!(object instanceof Serializable)) {
+            throw new IllegalArgumentException("设定缓存的对象：" + object.getClass() + "无法序列化，确保 implements Serializable");
+        }
+        ObjectOutputStream objOS = null;
+        ByteArrayOutputStream byteAOS = new ByteArrayOutputStream();
+        try {
+            objOS = new ObjectOutputStream(byteAOS);
+            objOS.writeObject(object);
+            return byteAOS.toByteArray();
+        } catch (Exception e) {
+            log.error("serialize error: " + e.getMessage());
+        } finally {
+            try {
+                if (objOS != null) objOS.close();
+                byteAOS.close();
+            } catch (IOException e) {
+                log.error("serialize close error : " + e.getMessage());
+            }
+        }
+        return null;
+    }
+
+    //反序列化
     private Object deserialize(byte[] bytes) {
         ByteArrayInputStream byteAIS = new ByteArrayInputStream(bytes);
         ObjectInputStream objIS = null;
