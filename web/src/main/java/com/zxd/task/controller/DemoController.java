@@ -1,6 +1,6 @@
 package com.zxd.task.controller;
 
-import com.zxd.task.model.City;
+import com.zxd.task.model.Region;
 import com.zxd.task.service.CityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +19,11 @@ public class DemoController {
     @Resource
     CityService cityService;
 
-    @RequestMapping(value = "/get_user", produces = "application/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_user", method = RequestMethod.GET)
     @ResponseBody
-    public City getUser(Integer uid){
-        City city = cityService.getCityById(1);
-        return city;
+    public Region getUser(Integer uid) {
+        Region region = cityService.getCityById(1);
+        System.out.println(region.toString());
+        return region;
     }
 }

@@ -7,7 +7,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class TaskServer {
 
     public static void main(String[] args) {
-        Server server = new Server(8082);
+        Server server = new Server(8088);
 
         WebAppContext context = new WebAppContext();
         context.setContextPath("/");

@@ -19,6 +19,7 @@
     <properties>
         <java-version>1.7</java-version>
         <org.springframework.version>4.0.5.RELEASE</org.springframework.version>
+        <json-version>2.3.2</json-version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,23 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
+            <version>20090211</version>
+        </dependency>
+        <!-- Spring自动处理JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${json-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${json-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${json-version}</version>
         </dependency>
     </dependencies>
 
