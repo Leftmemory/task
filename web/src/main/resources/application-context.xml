@@ -5,15 +5,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <import resource="classpath*:mybatis-config.xml"/>
-
-    <context:property-placeholder location="/WEB-INF/application.properties"/>
+    <context:property-placeholder location="classpath:application.properties"/>
 
     <context:component-scan base-package="com.zxd.task"/>
-    <import resource="spring-servlet.xml"/>
     <import resource="spring-mvc.xml"/>
     <import resource="spring-processor.xml"/>
     <import resource="spring-aop.xml"/>
+    <import resource="classpath*:service-kafka-producer.xml"/>
+    <import resource="classpath*:service-kafka-consumer.xml"/>
+
+    <import resource="classpath*:mybatis-config.xml"/>
 
     <bean id="redisClient"
           class="com.zxd.task.cache.JedisClient">

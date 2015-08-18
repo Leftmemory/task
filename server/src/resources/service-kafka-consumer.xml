@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+        >
+
+    <bean id="consumerProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:kafkaconsumer.properties"/>
+    </bean>
+    <bean id="consumerConfig"
+          class="kafka.consumer.ConsumerConfig">
+        <constructor-arg ref="consumerProperties"/>
+    </bean>
+    <bean id="connector"
+          class="kafka.consumer.Consumer" factory-method="createJavaConsumerConnector">
+        <constructor-arg ref="consumerConfig"/>
+    </bean>
+
+    <bean id="kafkaConsumerFactory" class="com.zxd.task.kafka.consumer.KafkaConsumerFactory"
+          init-method="init">
+        <property name="connector" ref="connector"/>
+        <property name="kafkaSwitch" value="${kafkaSwitch}"/>
+        <property name="processList">
+            <list>
+                <ref bean="localKafkaConsumer"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="localKafkaConsumer" class="com.zxd.task.kafka.consumer.LocalKafkaConsumer">
+        <property name="topic" value="test"/>
+        <property name="topics">
+            <map>
+                <entry key="test" value="3"/>
+            </map>
+        </property>
+    </bean>
+</beans>
