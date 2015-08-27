@@ -40,7 +40,7 @@
             </pattern>
         </encoder>
     </appender>
-    <logger name="com.tqmall.tqmallstall">
+    <logger name="com.task">
         <level value="INFO"/>
     </logger>
 
