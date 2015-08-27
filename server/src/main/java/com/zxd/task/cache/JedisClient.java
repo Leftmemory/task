@@ -33,6 +33,8 @@ public class JedisClient {
 
     private String password;
 
+    private int database;
+
     private boolean connected = false;
 
     private static final List<Class> SIMPLE_CLASS_OBJ = Lists.newArrayList();
@@ -46,6 +48,14 @@ public class JedisClient {
     public JedisClient(String domain, String password) {
         this.domain = domain;
         this.password = password;
+        this.database = 0;
+        init();
+    }
+
+    public JedisClient(String domain, String password, int database) {
+        this.domain = domain;
+        this.password = password;
+        this.database = database;
         init();
     }
 
@@ -61,7 +71,7 @@ public class JedisClient {
         int index = domain.indexOf(':');
         String host = domain.substring(0, index).trim();
         int port = Integer.parseInt(domain.substring(index + 1).trim());
-        jedisPool = new JedisPool(config, host, port, 2000, password);
+        jedisPool = new JedisPool(config, host, port, 2000, password, database);
         Object testResult = runTask(new Callback() {
             @Override
             public Object onTask(Jedis jedis) {
@@ -79,7 +89,6 @@ public class JedisClient {
 
     /**
      * 获取jedis实例
-     *
      */
     public Jedis getJedis() {
         try {
