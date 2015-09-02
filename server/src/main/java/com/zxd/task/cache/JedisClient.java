@@ -9,6 +9,7 @@ import redis.clients.util.SafeEncoder;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,9 +20,9 @@ import java.util.List;
 public class JedisClient {
     //可用连接实例的最大数目，默认值为8；
     //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
-    private static int MAX_ACTIVE = 1024;
+    private static int MAX_ACTIVE = -1;
     //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
-    private static int MAX_IDLE = 200;
+    private static int MAX_IDLE = 1000;
     //等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
     private static int MAX_WAIT = 10000;
     private static int TIMEOUT = 10000;
@@ -180,6 +181,36 @@ public class JedisClient {
             }
         });
         return success != null && (boolean) success;
+    }
+
+    public Object getAllKeys(final String str) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.keys(str);
+            }
+        });
+        return ret;
+    }
+
+    public Object getAllHkeys(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.hkeys(key);
+            }
+        });
+        return ret;
+    }
+
+    public <T> List<T> getListRange(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.lrange(key, 0, jedis.llen(key) - 1);
+            }
+        });
+        return ret == null ? Collections.<T>emptyList() : (List<T>) ret;
     }
 
 

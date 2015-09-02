@@ -13,14 +13,10 @@
     <import resource="spring-aop.xml"/>
     <import resource="classpath*:service-kafka-producer.xml"/>
     <import resource="classpath*:service-kafka-consumer.xml"/>
+    <import resource="service-redis-client.xml"/>
 
     <import resource="classpath*:mybatis-config.xml"/>
 
-    <bean id="redisClient"
-          class="com.zxd.task.cache.JedisClient">
-        <constructor-arg value="${redis.host}"/>
-        <constructor-arg value="${redis.auth}"/>
-    </bean>
 
     <!--<import resource="classpath*:alligator-dubbo-provider.xml"/>-->
 </beans>
