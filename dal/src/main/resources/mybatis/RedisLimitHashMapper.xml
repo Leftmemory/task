@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.task.mapper.RedisLimitHashMapper">
+    <resultMap id="BaseResultMap" type="com.zxd.task.model.RedisLimitHash">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, goods_id, time, type, number
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from redis_limit_hash
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from redis_limit_hash
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.zxd.task.model.RedisLimitHash">
+    insert into redis_limit_hash (id, user_id, goods_id, 
+      time, type, number)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{time,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{number,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zxd.task.model.RedisLimitHash">
+        insert into redis_limit_hash
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="time != null">
+                time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="batchInsertSelective">
+        insert into redis_limit_hash
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="record.id != null">
+                id,
+            </if>
+            <if test="record.userId != null">
+                user_id,
+            </if>
+            <if test="record.goodsId != null">
+                goods_id,
+            </if>
+            <if test="record.time != null">
+                time,
+            </if>
+            <if test="record.type != null">
+                type,
+            </if>
+            <if test="record.number != null">
+                number,
+            </if>
+        </trim>
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            <trim prefix=" (" suffix=")" suffixOverrides=",">
+                <if test="record.id != null">
+                    #{item.id,jdbcType=INTEGER},
+                </if>
+                <if test="record.userId != null">
+                    #{item.userId,jdbcType=INTEGER},
+                </if>
+                <if test="record.goodsId != null">
+                    #{item.goodsId,jdbcType=INTEGER},
+                </if>
+                <if test="record.time != null">
+                    #{item.time,jdbcType=VARCHAR},
+                </if>
+                <if test="record.type != null">
+                    #{item.type,jdbcType=INTEGER},
+                </if>
+                <if test="record.number != null">
+                    #{item.number,jdbcType=INTEGER},
+                </if>
+            </trim>
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zxd.task.model.RedisLimitHash">
+        update redis_limit_hash
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null">
+                time = #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zxd.task.model.RedisLimitHash">
+    update redis_limit_hash
+    set user_id = #{userId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      time = #{time,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

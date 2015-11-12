@@ -11,6 +11,7 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zxd on 2015/6/15.
@@ -201,6 +202,16 @@ public class JedisClient {
             }
         });
         return ret;
+    }
+
+    public <K, V> Map<K, V> getAllHash(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.hgetAll(key);
+            }
+        });
+        return ret == null ? Collections.<K, V>emptyMap() : (Map<K, V>) ret;
     }
 
     public <T> List<T> getListRange(final String key) {
