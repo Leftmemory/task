@@ -21,11 +21,13 @@ public class RedisTools {
     @Autowired
     private JedisClient jedisClient;
     @Autowired
+    private ExcelTools excelTools;
+    @Autowired
     private RedisLimitHashMapper redisLimitHashMapper;
 
     public void exportHash2Excel(String key, String fileName) {
         Map<String, String> map = jedisClient.getAllHash(key);
-        ExcelTools.exportExcel(fileName + ".xls", map);
+        excelTools.exportExcel(fileName + ".xls", map);
     }
 
     public void exportLimitHash2Table(String key, Integer actId) {
@@ -51,7 +53,7 @@ public class RedisTools {
                 limitHashList = Lists.newArrayList();
             }
         }
-        if(!CollectionUtils.isEmpty(limitHashList)){
+        if (!CollectionUtils.isEmpty(limitHashList)) {
             redisLimitHashMapper.batchInsertSelective(limitHashList.get(0), limitHashList);
         }
     }
