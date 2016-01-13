@@ -11,12 +11,10 @@
     <import resource="spring-mvc.xml"/>
     <import resource="spring-processor.xml"/>
     <import resource="spring-aop.xml"/>
-    <import resource="classpath*:service-kafka-producer.xml"/>
-    <import resource="classpath*:service-kafka-consumer.xml"/>
+    <!--<import resource="classpath*:service-kafka-producer.xml"/>-->
+    <!--<import resource="classpath*:service-kafka-consumer.xml"/>-->
     <import resource="service-redis-client.xml"/>
 
     <import resource="classpath*:mybatis-config.xml"/>
 
-
-    <!--<import resource="classpath*:alligator-dubbo-provider.xml"/>-->
 </beans>

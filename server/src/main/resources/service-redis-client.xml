@@ -20,14 +20,26 @@
     </bean>
 
     <!-- redis的连接池pool，不是必选项：timeout/password  -->
-    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
-        <constructor-arg index="0" ref="jedisPoolConfig"/>
-        <!-- host -->
-        <constructor-arg index="1" value="${redis.host}"/>
-        <!-- port -->
-        <constructor-arg index="2" value="${redis.port}" type="int"/>
-        <!-- timeout -->
-        <constructor-arg index="3" value="3000" type="int"/>
+    <!--<bean id="jedisPool" class="redis.clients.jedis.JedisPool">-->
+        <!--<constructor-arg index="0" ref="jedisPoolConfig"/>-->
+        <!--&lt;!&ndash; host &ndash;&gt;-->
+        <!--<constructor-arg index="1" value="${redis.host}"/>-->
+        <!--&lt;!&ndash; port &ndash;&gt;-->
+        <!--<constructor-arg index="2" value="${redis.port}" type="int"/>-->
+        <!--&lt;!&ndash; timeout &ndash;&gt;-->
+        <!--<constructor-arg index="3" value="3000" type="int"/>-->
+        <!--<constructor-arg index="4" value="${redis.auth}"/>-->
+    <!--</bean>-->
+
+    <bean id="JedisSentinelPool" class="redis.clients.jedis.JedisSentinelPool">
+        <constructor-arg index="0" value="mymaster"/>
+        <constructor-arg index="1">
+            <set>
+                <value>127.0.0.1:26379</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2" ref="jedisPoolConfig"/>
+        <constructor-arg index="3" value="3000"/>
         <constructor-arg index="4" value="${redis.auth}"/>
     </bean>
 

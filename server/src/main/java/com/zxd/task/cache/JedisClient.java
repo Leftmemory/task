@@ -2,8 +2,10 @@ package com.zxd.task.cache;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.util.SafeEncoder;
 
 import javax.annotation.Resource;
@@ -54,8 +56,8 @@ public class JedisClient {
      */
     public static int CACHE_EXP_FOREVER = 0;
 
-    @Resource
-    private JedisPool jedisPool;
+    @Autowired
+    private JedisSentinelPool jedisPool;
 
     private static final List<Class> SIMPLE_CLASS_OBJ = Lists.newArrayList();
 
