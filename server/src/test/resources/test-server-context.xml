@@ -19,6 +19,7 @@
     <!--<import resource="classpath*:service-kafka-producer.xml"/>-->
     <!--<import resource="classpath*:service-kafka-consumer.xml"/>-->
     <import resource="service-redis-client.xml"/>
+    <import resource="classpath*:mongo-config.xml"/>
 
 
 </beans>

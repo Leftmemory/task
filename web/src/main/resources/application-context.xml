@@ -16,5 +16,6 @@
     <import resource="service-redis-client.xml"/>
 
     <import resource="classpath*:mybatis-config.xml"/>
+    <!--<import resource="classpath*:mongo-config.xml"/>-->
 
 </beans>
