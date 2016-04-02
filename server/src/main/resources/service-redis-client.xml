@@ -35,7 +35,9 @@
         <constructor-arg index="0" value="mymaster"/>
         <constructor-arg index="1">
             <set>
-                <value>127.0.0.1:26379</value>
+                <value>121.43.226.133:26379</value>
+                <value>121.43.226.133:26380</value>
+                <value>121.43.226.133:26381</value>
             </set>
         </constructor-arg>
         <constructor-arg index="2" ref="jedisPoolConfig"/>
