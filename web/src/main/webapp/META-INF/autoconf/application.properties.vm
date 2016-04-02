@@ -1,0 +1,11 @@
+dubbo.application.name=${dubbo_application_name}
+zookeeper.address=${zookeeper_address}
+dubbo.port=${dubbo_port}
+dubbo.service.version=${dubbo_service_version}
+
+redis.host =${redis_host}
+redis.port = ${redis_port}
+redis.auth =${redis_auth}
+
+kafkaSwitch=${kafkaSwitch}
+

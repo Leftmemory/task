@@ -1,7 +1,7 @@
 package com.zxd.task.service.impl;
 
-import com.zxd.task.mapper.CityMapper;
-import com.zxd.task.model.City;
+import com.zxd.task.mapper.RegionMapper;
+import com.zxd.task.model.Region;
 import com.zxd.task.service.CityService;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,10 @@ import javax.annotation.Resource;
 public class CityServiceImpl implements CityService {
 
     @Resource
-    CityMapper cityMapper;
+    RegionMapper regionMapper;
 
     @Override
-    public City getCityById(Integer cityId) {
-        return cityMapper.selectByPrimaryKey(cityId);
+    public Region getCityById(Integer id) {
+        return regionMapper.selectByPrimaryKey(id);
     }
 }

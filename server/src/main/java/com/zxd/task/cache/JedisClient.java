@@ -2,14 +2,18 @@ package com.zxd.task.cache;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisSentinelPool;
 import redis.clients.util.SafeEncoder;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zxd on 2015/6/15.
@@ -17,23 +21,43 @@ import java.util.List;
  */
 @Slf4j
 public class JedisClient {
-    //可用连接实例的最大数目，默认值为8；
-    //如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
-    private static int MAX_ACTIVE = 1024;
-    //控制一个pool最多有多少个状态为idle(空闲的)的jedis实例，默认值也是8。
-    private static int MAX_IDLE = 200;
-    //等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException；
-    private static int MAX_WAIT = 10000;
-    private static int TIMEOUT = 10000;
-    //在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
-    private static boolean TEST_ON_BORROW = true;
-    private JedisPool jedisPool = null;
+    /**
+     * 缓存时效 1分钟
+     */
+    public static int CACHE_EXP_MINUTE = 60;
 
-    private String domain;
+    /**
+     * 缓存时效 10分钟
+     */
+    public static int CACHE_EXP_MINUTES = 60 * 10;
 
-    private String password;
+    /**
+     * 缓存时效 60分钟
+     */
+    public static int CACHE_EXP_HOURS = 60 * 60;
 
-    private boolean connected = false;
+    /**
+     * 缓存时效 1天
+     */
+    public static int CACHE_EXP_DAY = 3600 * 24;
+
+    /**
+     * 缓存时效 1周
+     */
+    public static int CACHE_EXP_WEEK = 3600 * 24 * 7;
+
+    /**
+     * 缓存时效 1月
+     */
+    public static int CACHE_EXP_MONTH = 3600 * 24 * 30 * 7;
+
+    /**
+     * 缓存时效 永久
+     */
+    public static int CACHE_EXP_FOREVER = 0;
+
+    @Autowired
+    private JedisSentinelPool jedisPool;
 
     private static final List<Class> SIMPLE_CLASS_OBJ = Lists.newArrayList();
 
@@ -43,43 +67,8 @@ public class JedisClient {
         SIMPLE_CLASS_OBJ.add(Boolean.class);
     }
 
-    public JedisClient(String domain, String password) {
-        this.domain = domain;
-        this.password = password;
-        init();
-    }
-
-    private void init() {
-        if (connected) return;
-
-        JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(MAX_ACTIVE);
-        config.setMaxIdle(MAX_IDLE);
-        config.setMaxWaitMillis(MAX_WAIT);
-        config.setTestOnBorrow(TEST_ON_BORROW);
-
-        int index = domain.indexOf(':');
-        String host = domain.substring(0, index).trim();
-        int port = Integer.parseInt(domain.substring(index + 1).trim());
-        jedisPool = new JedisPool(config, host, port, 2000, password);
-        Object testResult = runTask(new Callback() {
-            @Override
-            public Object onTask(Jedis jedis) {
-                return jedis != null;
-            }
-        }, true);
-        if (testResult == null || testResult.equals(false)) {
-            log.error("!!!!!test connect redis server failed: domain: " + domain + "!!!!!!!!!!!!");
-            destroy();
-        } else {
-            log.warn("test connect redis server succeed: domain: " + domain);
-            connected = true;
-        }
-    }
-
     /**
      * 获取jedis实例
-     *
      */
     public Jedis getJedis() {
         try {
@@ -97,17 +86,9 @@ public class JedisClient {
 
     public void destroy() {
         jedisPool.destroy();
-        connected = false;
     }
 
     private Object runTask(Callback callback) {
-        return runTask(callback, false);
-    }
-
-    private Object runTask(Callback callback, boolean isInit) {
-        if (!isInit) {
-            init();
-        }
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -116,9 +97,6 @@ public class JedisClient {
             log.error("Redis runTask error: ", e);
             jedisPool.returnBrokenResource(jedis);
             jedis = null;
-            if (!isInit && e.getCause() != null && e.getCause().getMessage().contains("Connection refused")) {
-                destroy();
-            }
         } finally {
             if (jedis != null) {
                 jedisPool.returnResource(jedis);
@@ -131,6 +109,28 @@ public class JedisClient {
         Object ret = runTask(new Callback() {
             @Override
             public Object onTask(Jedis jedis) {
+                Object obj = null;
+                if (isSimpleObj(cls)) {
+                    String str = jedis.hget(key, field);
+                    if (str != null)
+                        obj = createSimpleObj(str, cls);
+                } else {
+                    byte[] bs = jedis.hget(SafeEncoder.encode(key), SafeEncoder.encode(field));
+                    if (bs != null) {
+                        obj = deserialize(bs);
+                    }
+                }
+                return obj;
+            }
+        });
+        return ret == null ? null : (T) ret;
+    }
+
+    public <T> T getHash(final int dbIndex, final String key, final String field, final Class<T> cls) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                jedis.select(dbIndex);
                 Object obj = null;
                 if (isSimpleObj(cls)) {
                     String str = jedis.hget(key, field);
@@ -171,6 +171,117 @@ public class JedisClient {
             }
         });
         return success != null && (boolean) success;
+    }
+
+    public boolean setHash(final int dbIndex, final String key, final String field, final Object value, final int seconds) {
+        if (key == null || field == null || value == null) {
+            return false;
+        }
+        final Object success = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                Long ret;
+                jedis.select(dbIndex);
+                if (isSimpleObj(value.getClass())) {
+                    ret = jedis.hset(key, field, value.toString());
+                } else {
+                    byte[] bKey = SafeEncoder.encode(key);
+                    byte[] bField = SafeEncoder.encode(field);
+                    byte[] bValue = serialize(value);
+                    ret = jedis.hset(bKey, bField, bValue);
+                }
+                if (seconds != 0) {
+                    jedis.expire(key, seconds);
+                }
+                return ret != null && ret == 1;
+            }
+        });
+        return success != null && (boolean) success;
+    }
+
+
+    public Object getAllKeys(final String str) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.keys(str);
+            }
+        });
+        return ret;
+    }
+
+    public Object getAllKeys(final int dbIndex, final String str) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                jedis.select(dbIndex);
+                return jedis.keys(str);
+            }
+        });
+        return ret;
+    }
+
+    public Object getAllHkeys(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.hkeys(key);
+            }
+        });
+        return ret;
+    }
+
+    public Object getAllHkeys(final int dbIndex, final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                jedis.select(dbIndex);
+                return jedis.hkeys(key);
+            }
+        });
+        return ret;
+    }
+
+    public <K, V> Map<K, V> getAllHash(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.hgetAll(key);
+            }
+        });
+        return ret == null ? Collections.<K, V>emptyMap() : (Map<K, V>) ret;
+    }
+
+    public <K, V> Map<K, V> getAllHash(final int dbIndex, final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                jedis.select(dbIndex);
+                return jedis.hgetAll(key);
+            }
+        });
+        return ret == null ? Collections.<K, V>emptyMap() : (Map<K, V>) ret;
+    }
+
+    public <T> List<T> getListRange(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                return jedis.lrange(key, 0, jedis.llen(key) - 1);
+            }
+        });
+        return ret == null ? Collections.<T>emptyList() : (List<T>) ret;
+    }
+
+    public <T> List<T> getListRange(final int dbIndex, final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                jedis.select(dbIndex);
+                return jedis.lrange(key, 0, jedis.llen(key) - 1);
+            }
+        });
+        return ret == null ? Collections.<T>emptyList() : (List<T>) ret;
     }
 
 

@@ -1,4 +1,4 @@
-package test;
+package java;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;

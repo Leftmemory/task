@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <group>
+        <property name="zookeeper.address" description="zookeeper address" defaultValue="127.0.0.1:2181"/>
+        <property name="dubbo.application.name" description="dubbo服务名称" defaultValue="tast"/>
+        <property name="dubbo.port" description="dubbo服务端口" defaultValue="20880"/>
+        <property name="dubbo.service.version" description="dubbo版本号" defaultValue="1.0.0"/>
+
+        <property name="redis.host" description="redis host" defaultValue="127.0.0.1:6379"/>
+        <property name="redis.auth" description="redis auth" defaultValue="12qwASZX"/>
+        <property name="kafkaSwitch" description="kafka消息队列消费开关" defaultValue="on"/>
+
+    </group>
+    <script><!-- 定义需要动态替换的配置文件 该类还包括 *.xml文件等 -->
+        <generate template="application.properties.vm" destfile="WEB-INF/classes/application.properties"
+                  charset="utf-8"/>
+    </script>
+</config>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxd.task.mapper.RegionMapper" >
+  <resultMap id="BaseResultMap" type="com.zxd.task.model.Region" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="max_num" property="maxNum" jdbcType="INTEGER" />
+    <result column="region_id" property="regionId" jdbcType="INTEGER" />
+    <result column="gmt_modifed" property="gmtModifed" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zxd.task.model.Region" extends="BaseResultMap" >
+    <result column="code_nums" property="codeNums" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, region_name, code, level, parent_id, comment, max_num, region_id, gmt_modifed
+  </sql>
+  <sql id="Blob_Column_List" >
+    code_nums
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from db_region_code
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from db_region_code
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zxd.task.model.Region" >
+    insert into db_region_code (id, region_name, code, 
+      level, parent_id, comment, 
+      max_num, region_id, gmt_modifed, 
+      code_nums)
+    values (#{id,jdbcType=INTEGER}, #{regionName,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{level,jdbcType=TINYINT}, #{parentId,jdbcType=INTEGER}, #{comment,jdbcType=VARCHAR}, 
+      #{maxNum,jdbcType=INTEGER}, #{regionId,jdbcType=INTEGER}, #{gmtModifed,jdbcType=TIMESTAMP}, 
+      #{codeNums,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zxd.task.model.Region" >
+    insert into db_region_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="regionName != null" >
+        region_name,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="comment != null" >
+        comment,
+      </if>
+      <if test="maxNum != null" >
+        max_num,
+      </if>
+      <if test="regionId != null" >
+        region_id,
+      </if>
+      <if test="gmtModifed != null" >
+        gmt_modifed,
+      </if>
+      <if test="codeNums != null" >
+        code_nums,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="regionName != null" >
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="maxNum != null" >
+        #{maxNum,jdbcType=INTEGER},
+      </if>
+      <if test="regionId != null" >
+        #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModifed != null" >
+        #{gmtModifed,jdbcType=TIMESTAMP},
+      </if>
+      <if test="codeNums != null" >
+        #{codeNums,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zxd.task.model.Region" >
+    update db_region_code
+    <set >
+      <if test="regionName != null" >
+        region_name = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="comment != null" >
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="maxNum != null" >
+        max_num = #{maxNum,jdbcType=INTEGER},
+      </if>
+      <if test="regionId != null" >
+        region_id = #{regionId,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModifed != null" >
+        gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP},
+      </if>
+      <if test="codeNums != null" >
+        code_nums = #{codeNums,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zxd.task.model.Region" >
+    update db_region_code
+    set region_name = #{regionName,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR},
+      max_num = #{maxNum,jdbcType=INTEGER},
+      region_id = #{regionId,jdbcType=INTEGER},
+      gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP},
+      code_nums = #{codeNums,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zxd.task.model.Region" >
+    update db_region_code
+    set region_name = #{regionName,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR},
+      max_num = #{maxNum,jdbcType=INTEGER},
+      region_id = #{regionId,jdbcType=INTEGER},
+      gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
