@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+        >
+
+    <!-- 接收消息配置-->
+    <bean id="localMqReceiver" class="com.zxd.task.mq.receiver.LocalMqReceiver">
+        <property name="queueName" value="${task.test.queue}"/>
+    </bean>
+
+
+    <!--<bean id="mqReceiverFactory" class="com.zxd.task.mq.receiver.RabbitMqReceiverFactory"-->
+          <!--init-method="init">-->
+        <!--<property name="processList">-->
+            <!--<list>-->
+                <!--<ref bean="localMqReceiver"/>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+</beans>

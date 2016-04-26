@@ -9,3 +9,13 @@ redis.auth =${redis_auth}
 
 kafkaSwitch=${kafkaSwitch}
 
+
+task.mq.host = ${task_mq_host}
+task.mq.port = ${task_mq_port}
+task.mq.name = ${task_mq_name}
+task.mq.password = ${task_mq_password}
+
+mq.test.exchange = ${mq_test_exchange}
+mq.test.routingKey = ${mq_test_routingKey}
+task.test.queue = ${task_test_queue}
+

@@ -10,6 +10,14 @@
         <property name="redis.auth" description="redis auth" defaultValue="12qwASZX"/>
         <property name="kafkaSwitch" description="kafka消息队列消费开关" defaultValue="on"/>
 
+        <property name="task.mq.host" description="rabbitmq host" defaultValue="121.43.226.133"/>
+        <property name="task.mq.port" description="rabbitmq port" defaultValue="5672"/>
+        <property name="task.mq.name" description="rabbitmq 用户名" defaultValue="test"/>
+        <property name="task.mq.password" description="rabbitmq 密码" defaultValue="zxd.self"/>
+        <property name="mq.test.exchange" description="mq.test.exchange" defaultValue="zxd.self"/>
+        <property name="mq.test.routingKey" description="mq.test.routingKey" defaultValue="test_routing_key"/>
+        <property name="task.test.queue" description="task.test.queue" defaultValue="test"/>
+
     </group>
     <script><!-- 定义需要动态替换的配置文件 该类还包括 *.xml文件等 -->
         <generate template="application.properties.vm" destfile="WEB-INF/classes/application.properties"

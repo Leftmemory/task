@@ -17,5 +17,6 @@
 
     <import resource="classpath*:mybatis-config.xml"/>
     <!--<import resource="classpath*:mongo-config.xml"/>-->
+    <import resource="service-mq-common.xml"/>
 
 </beans>

@@ -20,6 +20,6 @@
     <!--<import resource="classpath*:service-kafka-consumer.xml"/>-->
     <import resource="service-redis-client.xml"/>
     <import resource="classpath*:mongo-config.xml"/>
-
+    <import resource="service-mq-common.xml"/>
 
 </beans>
