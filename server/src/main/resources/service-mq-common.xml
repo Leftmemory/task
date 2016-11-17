@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:self="http://self.zxd.com/schema/test"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/rabbit
-            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
+            http://self.zxd.com/schema/test
+		http://self.zxd.com/schema/test.xsd">
 
     <bean id="connectionFactory"
           class="com.rabbitmq.client.ConnectionFactory">
@@ -17,10 +20,22 @@
     </bean>
 
     <bean id="cachingConnectionFactory"
-          class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
-        <constructor-arg ref="connectionFactory"/>
+    class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+    <constructor-arg ref="connectionFactory"/>
     </bean>
+
+    <!-- 连接服务配置  -->
+    <!--<rabbit:connection-factory id="cachingConnectionFactory" username="${task.mq.name}" password="${task.mq.password}"-->
+                               <!--host="${task.mq.host}" port="${task.mq.port}" cache-mode="CONNECTION" virtual-host="zxd_self"-->
+                               <!--publisher-confirms="false"-->
+                               <!--connection-cache-size="5"/>-->
+
+    <rabbit:admin id="rabbitAdmin" connection-factory="cachingConnectionFactory" auto-startup="true"/>
+
+    <rabbit:template id="rabbitTemplate2"  connection-factory="cachingConnectionFactory" channel-transacted="false" />
 
     <import resource="service-mq-sender.xml"/>
     <import resource="service-mq-receiver.xml"/>
+
+    <self:demo id="demo1" name="test" value="hello" isSelf="true"/>
 </beans>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd"
-        >
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/rabbit
+       http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
 
     <!-- 接收消息配置-->
-    <bean id="localMqReceiver" class="com.zxd.task.mq.receiver.LocalMqReceiver">
-        <property name="queueName" value="${task.test.queue}"/>
-    </bean>
+    <!--<bean id="localMqReceiver" class="com.zxd.task.mq.receiver.LocalMqReceiver">-->
+        <!--<property name="queueName" value="${task.test.queue}"/>-->
+    <!--</bean>-->
 
 
     <!--<bean id="mqReceiverFactory" class="com.zxd.task.mq.receiver.RabbitMqReceiverFactory"-->
@@ -19,4 +21,31 @@
             <!--</list>-->
         <!--</property>-->
     <!--</bean>-->
+
+    <!--<bean id="rabbitAdmin"-->
+          <!--class="org.springframework.amqp.rabbit.core.RabbitAdmin">-->
+        <!--<constructor-arg ref="cachingConnectionFactory" />-->
+    <!--</bean>-->
+
+    <!-- 创建rabbitTemplate 消息模板类 -->
+    <bean id="rabbitTemplate"
+          class="org.springframework.amqp.rabbit.core.RabbitTemplate">
+        <constructor-arg ref="cachingConnectionFactory"></constructor-arg>
+    </bean>
+
+    <!--接收方处理线程池-->
+    <bean id="consumeListenerPool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5"/>
+        <property name="maxPoolSize" value="10"/>
+        <property name="queueCapacity" value="0"/>
+        <property name="waitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+
+    <bean id="localMqListener" class="com.zxd.task.mq.receiver.LocalMqListener"/>
+
+    <rabbit:listener-container connection-factory="cachingConnectionFactory" acknowledge="auto"
+                               task-executor="consumeListenerPool" concurrency="2" prefetch="20">
+        <rabbit:listener queue-names="${task.test.queue}" ref="localMqListener" />
+    </rabbit:listener-container>
 </beans>

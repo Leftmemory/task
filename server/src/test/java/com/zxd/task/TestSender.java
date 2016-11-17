@@ -26,11 +26,11 @@ public class TestSender {
     @Test
     public void test() {
 
-        String exchange = "zxd.self";//指定交换机
+        String exchange = "fanout.test";//指定交换机
         String routingKey = "test_routing_key";//指定路由
 
         Map<String, Object> map = Maps.newHashMap();
-        map.put("queueName", "zxd.self");
+        map.put("queueName", "测试1");
         map.put("exchangeName", exchange);
 
         rabbitTemplate.convertAndSend(exchange, routingKey, map.toString());
@@ -40,7 +40,7 @@ public class TestSender {
     @Test
     public void test1() {
 
-        String exchange = "zxdtest";//指定交换机
+        String exchange = "zxd.self";//指定交换机
         String routingKey = "test_share";//指定路由
 
         Map<String, Object> map = Maps.newHashMap();
