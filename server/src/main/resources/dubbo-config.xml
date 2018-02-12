@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		   http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		   http://code.alibabatech.com/schema/dubbo
+		   http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--<context:property-placeholder order="20" ignore-unresolvable="true"-->
+                                  <!--location="classpath:dubbo.properties"/>-->
+    <dubbo:application name="task-install" owner="zxd" organization="self" logger="log4j"
+                       environment="develop"/>
+    <dubbo:registry address="${dubbo.registry.address}" check="false" client="curator"/>
+    <dubbo:protocol name="dubbo" port="-1" accesslog="true"/>
+    <dubbo:monitor protocol="registry" />
+
+    <dubbo:provider delay="-1" group="${dubbo.provider.group}" version="1.0" timeout="5000" filter="-monitor"/>
+
+
+    <dubbo:consumer group="${dubbo.consumer.group}" version="1.0"  cluster="failfast" check="false"/>
+
+</beans>

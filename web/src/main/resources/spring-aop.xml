@@ -29,8 +29,7 @@
         <!--<property name="proxyInterfaces" value="com.zxd.task.service.Person" />-->
     <!--</bean>-->
 
-
-    <aop:aspectj-autoproxy/>
+    <!--<aop:aspectj-autoproxy/>-->
     <!--<bean class="org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"/>-->
 
 
@@ -40,4 +39,13 @@
             <!--<aop:after method="afterPlay" pointcut="execution(* *.play(..))"/>-->
         <!--</aop:aspect>-->
     <!--</aop:config>-->
+
+    <bean id="playInterceptor3" class="com.zxd.task.interceptor.PlayInterceptor3"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="controlWrapper"
+                      expression="execution(* com.zxd.task.interceptor..*.play(..)))"/>
+        <aop:advisor advice-ref="playInterceptor3"
+                     pointcut-ref="controlWrapper"/>
+    </aop:config>
 </beans>

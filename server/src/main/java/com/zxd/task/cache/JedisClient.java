@@ -105,6 +105,16 @@ public class JedisClient {
         return null;
     }
 
+    public void delete(final String key) {
+        Object ret = runTask(new Callback() {
+            @Override
+            public Object onTask(Jedis jedis) {
+                Long obj = jedis.del(key);
+                return obj;
+            }
+        });
+    }
+
     public <T> T getHash(final String key, final String field, final Class<T> cls) {
         Object ret = runTask(new Callback() {
             @Override

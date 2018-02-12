@@ -1,5 +1,6 @@
 package com.zxd.task.controller;
 
+import com.zxd.task.interceptor.AopUseCglibTest;
 import com.zxd.task.model.Region;
 import com.zxd.task.service.CityService;
 import com.zxd.task.service.Person;
@@ -26,13 +27,39 @@ public class DemoController {
     @Resource(name = "demo1")
     private XsdDemo xsdDemo;
 
-    @RequestMapping(value = "/get_user", method = RequestMethod.GET)
+    @Autowired
+    private AopUseCglibTest aopUseCglibTest;
+
+    @RequestMapping(value = "/test1", method = RequestMethod.GET)
     @ResponseBody
-    public String getUser(Integer uid) {
+    public String test1(Integer uid) {
 //        Region region = cityService.getCityById(1);
 //        System.out.println(region.toString());
         person.play();
-        System.out.println(xsdDemo.getName());
+//        System.out.println(xsdDemo.getName());
+        return "aaa";
+    }
+
+    @RequestMapping(value = "/testInner", method = RequestMethod.GET)
+    @ResponseBody
+    public String testAop(Integer uid) {
+        person.testInner();
+//        System.out.println(xsdDemo.getName());
+        return "aaa";
+    }
+
+
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    @ResponseBody
+    public String test2(Integer uid) {
+        aopUseCglibTest.play();
+        return "aaa";
+    }
+
+    @RequestMapping(value = "/testInner2", method = RequestMethod.GET)
+    @ResponseBody
+    public String testAop2(Integer uid) {
+        aopUseCglibTest.testInner();
         return "aaa";
     }
 }

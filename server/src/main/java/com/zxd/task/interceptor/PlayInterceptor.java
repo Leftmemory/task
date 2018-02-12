@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
  * @author zxd
  * @since 16/5/19.
  */
-@Aspect
 @Component
+@Aspect
 public class PlayInterceptor {
 
-    @Pointcut("execution(void *.play111())")
+    @Pointcut("execution(void *.play())")
     public void playPoint(){}
 
     @Before("playPoint()")
