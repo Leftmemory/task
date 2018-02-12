@@ -2,13 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:rabbit="http://www.springframework.org/schema/rabbit"
-       xmlns:self="http://self.zxd.com/schema/test"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/rabbit
-            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
-            http://self.zxd.com/schema/test
-		http://self.zxd.com/schema/test.xsd">
+            http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd">
 
     <bean id="connectionFactory"
           class="com.rabbitmq.client.ConnectionFactory">
@@ -36,6 +33,4 @@
 
     <import resource="service-mq-sender.xml"/>
     <import resource="service-mq-receiver.xml"/>
-
-    <self:demo id="demo1" name="test" value="hello" isSelf="true"/>
 </beans>
