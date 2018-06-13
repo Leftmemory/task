@@ -24,9 +24,7 @@ public class CglibTestProxy implements MethodInterceptor {
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         if(method.getName().equals("test1")) {
             System.out.println("------ before -----");
-            CglibTest cglibTest = new CglibTest();
-            Object result = methodProxy.invokeSuper(cglibTest, objects);
-//            Object result = methodProxy.invoke(cglibTest, objects);
+            Object result = methodProxy.invokeSuper(o, objects);
             System.out.println("------ after -----");
             return result;
 
@@ -40,8 +38,8 @@ public class CglibTestProxy implements MethodInterceptor {
     public static void main(String[] args) throws Exception{
         CglibTestProxy cglibTestInterceptor = new CglibTestProxy();
         CglibTest cglibTest =  (CglibTest)cglibTestInterceptor.createProxy(CglibTest.class);
-        cglibTest.test1();
-//        cglibTest.testInner();
+//        cglibTest.test1();
+        cglibTest.testInner();
 //        System.in.read();
     }
 }
