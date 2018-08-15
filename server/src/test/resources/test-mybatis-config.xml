@@ -51,10 +51,10 @@
     </bean>
 
     <!-- 初始化数据表结构 -->
-    <jdbc:initialize-database data-source="dataSource">
-        <jdbc:script location="classpath:h2/sql/schema.sql" encoding="UTF-8"/>
-        <jdbc:script location="classpath:h2/data/import-data.sql" encoding="UTF-8"/>
-    </jdbc:initialize-database>
+    <!--<jdbc:initialize-database data-source="dataSource">-->
+        <!--<jdbc:script location="classpath:h2/sql/schema.sql" encoding="UTF-8"/>-->
+        <!--<jdbc:script location="classpath:h2/data/import-data.sql" encoding="UTF-8"/>-->
+    <!--</jdbc:initialize-database>-->
 
     <!-- 开启事务注解驱动 -->
     <tx:annotation-driven/>
