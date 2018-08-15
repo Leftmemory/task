@@ -29,6 +29,11 @@
         </dependency>
 
         <dependency>
+        <groupId>redis.clients</groupId>
+        <artifactId>sharded-jedis-sentinel-pool</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>

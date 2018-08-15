@@ -15,7 +15,7 @@
     </context:component-scan>
 
 
-    <import resource="classpath*:mybatis-config.xml"/>
+    <import resource="classpath*:test-mybatis-config.xml"/>
     <!--<import resource="classpath*:service-kafka-producer.xml"/>-->
     <!--<import resource="classpath*:service-kafka-consumer.xml"/>-->
     <import resource="service-redis-client.xml"/>

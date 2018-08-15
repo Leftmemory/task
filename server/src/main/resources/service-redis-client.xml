@@ -46,4 +46,19 @@
     </bean>
 
     <bean id="redisClient" class="com.zxd.task.cache.JedisClient"/>
+
+
+    <!--&lt;!&ndash; 分片Jedis连接池 &ndash;&gt;-->
+    <!--<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisSentinelPool" destroy-method="destroy">-->
+        <!--<constructor-arg index="0" ref="supportKeyValueNotEqualObject" />-->
+        <!--<constructor-arg index="1" ref="jedisPoolConfig"/>-->
+        <!--<constructor-arg index="2" value="${sharded.password}"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 支持分片不同profile不等的key-value对 &ndash;&gt;-->
+    <!--<bean id="supportKeyValueNotEqualObject" class="redis.clients.jedis.SupportKeyValueNotEqualObject">-->
+        <!--<constructor-arg index="0" value="${sharded.host.name}" />-->
+        <!--<constructor-arg index="1" value="${sharded.sentinel}" />-->
+    <!--</bean>-->
+
 </beans>
